@@ -1,21 +1,22 @@
 library example01;
 
-import 'dart:html' as html;
+import 'package:web/web.dart';
 import 'package:stagexl/stagexl.dart';
 import 'package:stagexl_particle/stagexl_particle.dart';
 
-void main() {
+Future<void> main() async {
 
-  StageXL.stageOptions.renderEngine = RenderEngine.WebGL;
-  StageXL.stageOptions.backgroundColor = Color.Black;
+  final options = StageOptions()
+    ..renderEngine = RenderEngine.WebGL
+    ..backgroundColor = Color.Black;
 
-  var stage = new Stage(html.querySelector('#stage'));
-  var renderLoop = new RenderLoop();
-  renderLoop.addStage(stage);
+  final canvas = window.document.querySelector('#stage') as HTMLCanvasElement;
+  final stage = Stage(canvas, options: options);
+  RenderLoop()..addStage(stage);
 
   //-------------------------
 
-  var particleConfig = {
+  final particleConfig = {
     "maxParticles":2000,
     "duration":0,
     "lifeSpan":0.7, "lifespanVariance":0.2,
@@ -37,21 +38,20 @@ void main() {
     "finishColor":{"red":1, "green":0, "blue":0, "alpha":0}
   };
 
-  var particleEmitter = new ParticleEmitter(particleConfig);
-  particleEmitter.setEmitterLocation(400, 300);
+  final particleEmitter = ParticleEmitter(particleConfig);
+  particleEmitter.setEmitterLocation(100, 300);
   stage.addChild(particleEmitter);
   stage.juggler.add(particleEmitter);
 
   //-------------------------
 
-  var mouseEventListener = (me) {
-    if (me.buttonDown) particleEmitter.setEmitterLocation(me.localX, me.localY);
-  };
+  void mouseEventListener(e) {
+    if (e.buttonDown) particleEmitter.setEmitterLocation(e.localX, e.localY);
+  }
 
-  var glassPlate = new GlassPlate(800, 600);
+  final glassPlate = GlassPlate(800, 600);
   glassPlate.onMouseDown.listen(mouseEventListener);
   glassPlate.onMouseMove.listen(mouseEventListener);
   stage.addChild(glassPlate);
 
 }
-

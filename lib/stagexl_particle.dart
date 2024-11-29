@@ -1,8 +1,8 @@
 library stagexl_particle;
 
+import 'dart:js_interop';
 import 'dart:math' hide Point, Rectangle;
-import 'dart:html' show CanvasElement, CanvasRenderingContext2D;
-import 'dart:web_gl' as gl;
+import 'package:web/web.dart' show CanvasRenderingContext2D;
 
 import 'package:stagexl/stagexl.dart';
 
@@ -18,27 +18,4 @@ part 'src/particle_color.dart';
 part 'src/particle_emitter.dart';
 part 'src/particle_render_program.dart';
 
-
-bool _ensureBool(bool value) {
-  if (value is bool) {
-    return value;
-  } else {
-    throw new ArgumentError("The supplied value ($value) is not a bool.");
-  }
-}
-
-int _ensureInt(int value) {
-  if (value is int) {
-    return value;
-  } else {
-    throw new ArgumentError("The supplied value ($value) is not an int.");
-  }
-}
-
-num _ensureNum(num value) {
-  if (value is num) {
-    return value;
-  } else {
-    throw new ArgumentError("The supplied value ($value) is not a number.");
-  }
-}
+typedef _Json = Map<String, Object?>;

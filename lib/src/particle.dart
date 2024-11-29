@@ -4,34 +4,37 @@ class _Particle {
 
   final ParticleEmitter _particleEmitter;
 
-  num _currentTime = 0.0;
-  num _totalTime = 0.0;
-  num _x = 0.0;
-  num _y = 0.0;
-  num _size = 0.0;
-  num _sizeDelta = 0.0;
-  num _rotation = 0.0;
-  num _rotationDelta = 0.0;
-  num _startX = 0.0;
-  num _startY = 0.0;
-  num _velocityX = 0.0;
-  num _velocityY = 0.0;
-  num _radialAcceleration = 0.0;
-  num _tangentialAcceleration = 0.0;
-  num _emitRadius = 0.0;
-  num _emitRadiusDelta = 0.0;
-  num _emitRotation = 0.0;
-  num _emitRotationDelta = 0.0;
-  num _colorR = 0.0;
-  num _colorG = 0.0;
-  num _colorB = 0.0;
-  num _colorA = 0.0;
-  num _colorDeltaR = 0.0;
-  num _colorDeltaG = 0.0;
-  num _colorDeltaB = 0.0;
-  num _colorDeltaA = 0.0;
+  num _currentTime = 0;
+  num _totalTime = 0;
+  num _x = 0;
+  num _y = 0;
+  num _size = 0;
+  num _sizeDelta = 0;
 
-  _Particle _nextParticle;
+  // TODO: Rotation
+  // num _rotation = 0;
+  // num _rotationDelta = 0;
+
+  num _startX = 0;
+  num _startY = 0;
+  num _velocityX = 0;
+  num _velocityY = 0;
+  num _radialAcceleration = 0;
+  num _tangentialAcceleration = 0;
+  num _emitRadius = 0;
+  num _emitRadiusDelta = 0;
+  num _emitRotation = 0;
+  num _emitRotationDelta = 0;
+  double _colorR = 0;
+  double _colorG = 0;
+  double _colorB = 0;
+  double _colorA = 0;
+  num _colorDeltaR = 0;
+  num _colorDeltaG = 0;
+  num _colorDeltaB = 0;
+  num _colorDeltaA = 0;
+
+  _Particle? _nextParticle;
 
   _Particle(ParticleEmitter particleEmitter) : _particleEmitter = particleEmitter;
 
@@ -43,7 +46,7 @@ class _Particle {
     var totalTime = pe._lifespan + pe._lifespanVariance * pe._randomVariance;
     if (totalTime < 0.01) totalTime = 0.01;
 
-    _currentTime = 0.0;
+    _currentTime = 0;
     _totalTime = totalTime;
 
     _x = pe._locationX + pe._locationXVariance * pe._randomVariance;
@@ -132,7 +135,7 @@ class _Particle {
 
   //-----------------------------------------------------------------------------------------------
 
-  _renderParticleCanvas(CanvasRenderingContext2D context) {
+  void _renderParticleCanvas(CanvasRenderingContext2D context) {
 
     var index = 1 + _currentTime * 31 ~/ _totalTime;
     if (index < 1) index = 1;
@@ -150,12 +153,12 @@ class _Particle {
     var destinationWidth= _size;
     var destinationHeight = _size;
 
-    context.drawImageScaledFromSource(source,
+    context.drawImage(source, 
       sourceX, sourceY, sourceWidth, sourceHeight,
       destinationX, destinationY, destinationWidth, destinationHeight);
   }
 
-  _renderParticleWegGL(_ParticleRenderProgram renderProgram) {
+  void _renderParticleWegGL(_ParticleRenderProgram renderProgram) {
     renderProgram.renderParticle(
         _particleEmitter._renderTextureQuads[0],
         _x, _y, _size, _colorR, _colorG, _colorB, _colorA);

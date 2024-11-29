@@ -6,7 +6,8 @@ class _ParticleRenderProgram extends RenderProgram {
   // aVertexTextCoord:  Float32(u), Float32(v)
   // aVertextColor:     Float32(r), Float32(g), Float32(b), Float32(a)
 
-  String get vertexShaderSource => """
+  @override
+  String get vertexShaderSource => '''
 
     precision mediump float;
     uniform mat4 uProjectionMatrix;
@@ -24,9 +25,10 @@ class _ParticleRenderProgram extends RenderProgram {
       vColor = aVertexColor;
       gl_Position = vec4(aVertexPosition, 1.0, 1.0) * uGlobalMatrix * uProjectionMatrix;
     }
-    """;
+    ''';
 
-  String get fragmentShaderSource => """
+  @override
+  String get fragmentShaderSource => '''
 
     precision mediump float;
     uniform sampler2D uSampler;
@@ -38,7 +40,7 @@ class _ParticleRenderProgram extends RenderProgram {
       vec4 color = texture2D(uSampler, vTextCoord);
       gl_FragColor = vec4(color.rgb * vColor.rgb * vColor.a, color.a * vColor.a);
     }
-    """;
+    ''';
 
   //---------------------------------------------------------------------------
 
@@ -48,7 +50,7 @@ class _ParticleRenderProgram extends RenderProgram {
 
   void set globalMatrix(Matrix globalMatrix) {
     _globalMatrix.copyFrom2D(globalMatrix);
-    renderingContext.uniformMatrix4fv(uniforms["uGlobalMatrix"], false, _globalMatrix.data);
+    renderingContext.uniformMatrix4fv(uniforms["uGlobalMatrix"], false, _globalMatrix.data.toJS);
   }
 
   @override
@@ -67,7 +69,7 @@ class _ParticleRenderProgram extends RenderProgram {
 
   void renderParticle(
       RenderTextureQuad renderTextureQuad,
-      num x, num y, num size, num r, num g, num b, num a) {
+      num x, num y, num size, double r, double g, double b, double a) {
 
     var left = x - size / 2;
     var top = y - size / 2;
@@ -75,11 +77,8 @@ class _ParticleRenderProgram extends RenderProgram {
     var bottom = y + size / 2;
 
     var vxList = renderTextureQuad.vxList;
-    var ixListCount = 6;
-    var vxListCount = 4;
-
-    // The following code contains dart2js_hints to keep
-    // the generated JavaScript code clean and fast!
+    const ixListCount = 6;
+    const vxListCount = 4;
 
     var ixData = renderBufferIndex.data;
     var ixPosition = renderBufferIndex.position;
